@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-project-ns
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: space-deployment
+  namespace: app-project-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: space
+  template:
+    metadata:
+      labels:
+        app: space
+    spec:
+      containers:
+      - name: space-container
+        image: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: space-service
+  namespace: app-project-ns
+spec:
+  selector:
+    app: space
+  ports:
+    - protocol: TCP
+      nodePort: 31000
+      port: 8080
+      targetPort: 80
+  type: NodePort
+

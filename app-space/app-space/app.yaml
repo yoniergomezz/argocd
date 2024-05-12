@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: contenedor-apps
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: space-deployment
+  namespace: contenedor-apps
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: space
+  template:
+    metadata:
+      labels:
+        app: space
+    spec:
+      containers:
+      - name: space-container
+        # image: neytor/catcontainer
+        image: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: space-service
+  namespace: contenedor-apps
+spec:
+  selector:
+    app: space
+  ports:
+    - protocol: TCP
+      nodePort: 32000
+      port: 8080
+      targetPort: 80
+  type: NodePort
+
